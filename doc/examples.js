@@ -1,5 +1,6 @@
 Demos = (() => {
 var wikidataItem = {};
+var wikidataHumanGeneItem = {}
 
 wikidataItem.schema = `PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX prov: <http://www.w3.org/ns/prov#>
@@ -48,19 +49,32 @@ WHERE
       fails: {
       }
     },
-    "ShEx to validate a wikidata a": {
-          schema: wikidataItem.schema,
-          passes: {
-            "Get all Wikidata items on Cancers (SPARQL)": {
-              data: wikidataItem.cats,
-              queryMap: "SPARQL `SELECT ?item ?itemLabel "+
-                "WHERE "+
-                "{ ?item wdt:P279* wd:Q12078 . "+
-                "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" } "+
-                "} LIMIT 10`@- start -"}
-          },
-          fails: {
-          }
-        },
   };
+  wikidataHumanGeneItem.schema = ``
+
+  wikidataHumanGeneItem.cats = ` Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+
+                               Query: SELECT DISTINCT * WHERE {
+                                        ?item wdt:P351 ?ncbigeneid ;
+                                              wdt:P703 wd:Q15978631 .
+                                      }
+                                      LIMIT 20`;
+
+  return {
+      "20 random human genes selected to verify adherence the Genewiki human gene shape": {
+        schema: wikidataItem.schema,
+        passes: {
+          "Get human genes (SPARQL)": {
+            data: wikidataItem.cats,
+            queryMap: "SPARQL `SELECT DISTINCT * WHERE { "+
+              "{ ?item wdt:P351 ?ncbigeneid ; "+
+              " wdt:P703 wd:Q15978631 ." +
+              "  } "+
+              "} LIMIT 20`@- start -"}
+        },
+        fails: {
+        }
+      },
+    };
+
 })();
