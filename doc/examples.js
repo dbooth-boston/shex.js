@@ -163,31 +163,6 @@ proteinRecord_badDatatype = `PREFIX ex: <http://a.example/>
 `;
 
   return {
-    "clinical observation": {
-      schema: clinicalObs.schema,
-      passes: {
-        "with birthdate": {
-          data: clinicalObs.with_birthdate,
-          queryMap: "{FOCUS :status _}@- start -,\n<Patient2>@<http://a.example/ObservationShape>"},
-        "without birthdate": {
-          data: clinicalObs.without_birthdate,
-          queryMap: "<http://a.example/Obs1>@- start -"},
-        "no subject name": {
-          data: clinicalObs.no_subject_name,
-          queryMap: "<http://a.example/Obs1>@- start -"}
-      },
-      fails: {
-        "bad status": {
-          data: clinicalObs.bad_status,
-          queryMap: "<http://a.example/Obs1>@- start -"},
-        "no subject": {
-          data: clinicalObs.no_subject,
-          queryMap: "<http://a.example/Obs1>@- start -"},
-        "wrong birthdate datatype": {
-          data: clinicalObs.birthdate_datatype,
-          queryMap: "<http://a.example/Obs1>@- start -"}
-      }
-    },
     "Each Wikidata item on Cancer should have a NCI Thesaurus ID": {
       schema: wikidataItem.schema,
       passes: {
@@ -202,23 +177,5 @@ proteinRecord_badDatatype = `PREFIX ex: <http://a.example/>
       fails: {
       }
     },
-    "protein record": {
-      schema: proteinRecord,
-      meta: proteinRecord_meta,
-      passes: {
-        "good": {
-          data: proteinRecord_good,
-          queryMap: "<http://a.example/s>@<http://a.example/S>"}
-      },
-      fails: {
-        "bad label": {
-          data: proteinRecord_badLabel,
-          queryMap: "<http://a.example/s>@<http://a.example/S>"},
-        "bad datatype": {
-          data: proteinRecord_badDatatype,
-          queryMap: "<http://a.example/s>@<http://a.example/S>"}
-      }
-    }
-
   };
 })();
