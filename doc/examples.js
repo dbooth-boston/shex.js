@@ -338,8 +338,8 @@ return {
                                                "     ?genomicStart pq:P659 ?o ."+
                                                "     ?genomicEnd pq:P659 ?t .}`@- start - "},
 
-        }.
-
+        }
+      },
       "Each Wikidata item on Cancer should have a NCI Thesaurus ID": {
             schema: wikidataItem.schema,
             passes: {
