@@ -320,10 +320,9 @@ return {
                             queryMap: "SPARQL `SELECT * WHERE { "+
                                       "?item wdt:P351 ?ncbi_gene_id ;" +
                                        "wdt:P703 wd:Q15978631 ; " +
-                                       "wdt:P352 ?uniprot_id . }`@- start -"}
-        },
+                                       "wdt:P352 ?uniprot_id . }`@- start -"},
 
-          "Start and End locations without build version": {
+           "Start and End locations without build version": {
                             data: wikidataHumanGeneItem.fail2,
                             queryMap: "SPARQL `PREFIX wd: <http://www.wikidata.org/entity/> "+
                                                "PREFIX p: <http://www.wikidata.org/prop/>"+
@@ -337,9 +336,10 @@ return {
                                                "   ?genomicEnd ps:P645 ?end ."+
                                                "   FILTER NOT EXISTS { "+
                                                "     ?genomicStart pq:P659 ?o ."+
-                                               "     ?genomicEnd pq:P659 ?t .}} "
+                                               "     ?genomicEnd pq:P659 ?t .} "
+                                              }
         }
-      },
+      }};
       "Each Wikidata item on Cancer should have a NCI Thesaurus ID": {
             schema: wikidataItem.schema,
             passes: {
@@ -353,7 +353,7 @@ return {
             },
             fails: {
             }
-      },
+      }
     };
 
 })();
