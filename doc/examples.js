@@ -24,7 +24,7 @@ start = @<wikidata_item>
 }
 `;
 
-wikidataItem.cats = `
+wikidataItem.sparql = `
 Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
 Query: SELECT ?item ?itemLabel
@@ -39,7 +39,7 @@ WHERE
       schema: wikidataItem.schema,
       passes: {
         "Get all Wikidata items on Cancers (SPARQL)": {
-          data: wikidataItem.cats,
+          data: wikidataItem.sparql,
           queryMap: "SPARQL `SELECT ?item ?itemLabel "+
             "WHERE "+
             "{ ?item wdt:P279* wd:Q12078 . "+
@@ -52,7 +52,7 @@ WHERE
   };
   wikidataHumanGeneItem.schema = ``
 
-  wikidataHumanGeneItem.cats = ` Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+  wikidataHumanGeneItem.sparql = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
                                Query: SELECT DISTINCT * WHERE {
                                         ?item wdt:P351 ?ncbigeneid ;
@@ -62,10 +62,10 @@ WHERE
 
   return {
       "20 random human genes selected to verify adherence the Genewiki human gene shape": {
-        schema: wikidataItem.schema,
+        schema: wikidataHumanGeneItem.schema,
         passes: {
           "Get human genes (SPARQL)": {
-            data: wikidataItem.cats,
+            data: wikidataHumanGeneItem.sparql,
             queryMap: "SPARQL `SELECT DISTINCT * WHERE { "+
               "{ ?item wdt:P351 ?ncbigeneid ; "+
               " wdt:P703 wd:Q15978631 ." +
