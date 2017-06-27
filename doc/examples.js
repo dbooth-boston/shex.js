@@ -72,7 +72,7 @@ wikidataHumanGeneItem.schema = `# Shape Expression for Human genes in Wikidata
                                 	p:P593 @<P593_homologene_id>* ;
 
                                 	# Negative shapes
-                                	p:P352 @<P352_uniprot_id>{0} ;
+                                	p:P352 @<P352_uniprot_id_wor>{0} ;
                                 }
 
                                 # Shape expressions for Wikidata statements
@@ -138,7 +138,7 @@ wikidataHumanGeneItem.schema = `# Shape Expression for Human genes in Wikidata
                                 	prov:wasDerivedFrom @<ncbi-gene-reference>+ ;
                                 }
 
-                                <P352_uniprot_id> {
+                                <P352_uniprot_id_wor> {
                                     ps:P352 LITERAL ;
                                 }
 
@@ -275,6 +275,14 @@ wikidataHumanGeneItem.sparql = `Endpoint: https://query.wikidata.org/bigdata/nam
                                       }
                                       LIMIT 20`;
 
+wikidataHumanGeneItem.fail = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+
+Query: SELECT * WHERE {
+  ?item wdt:P351 ?ncbi_gene_id ;
+        wdt:P703 wd:Q15978631 ;
+        wdt:P352 ?uniprot_id .
+}`
+
 return {
       "20  genes items in Wikidata and their adherence to the Genewiki human gene shape": {
         schema: wikidataHumanGeneItem.schema,
@@ -288,6 +296,12 @@ return {
               "} LIMIT 20`@- start -"}
         },
         fails: {
+           "Human with a uniprot identifier": {
+                            data: wikidataHumanGeneItem.fail,
+                            queryMap: "SPARQL `SELECT * WHERE { "+
+                                      "?item wdt:P351 ?ncbi_gene_id ;" +
+                                       "wdt:P703 wd:Q15978631 ; " +
+                                       "wdt:P352 ?uniprot_id . }`@- start -"}
         }
       },
       "Each Wikidata item on Cancer should have a NCI Thesaurus ID": {
