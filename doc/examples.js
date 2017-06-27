@@ -283,8 +283,27 @@ Query: SELECT * WHERE {
         wdt:P352 ?uniprot_id .
 }`
 
+wikidataHumanGeneItem.fail2 = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+
+Query: PREFIX wd: <http://www.wikidata.org/entity/>
+       PREFIX p: <http://www.wikidata.org/prop/>
+       PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+       PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+       SELECT * WHERE {
+          ?item wdt:P703 wd:Q15978631 ;
+                p:P644 ?genomicStart ;
+                p:P645 ?genomicEnd .
+          ?genomicStart ps:P644 ?start .
+          ?genomicEnd ps:P645 ?end .
+          FILTER NOT EXISTS {
+            ?genomicStart pq:P659 ?o .
+            ?genomicEnd pq:P659 ?t .
+            }
+       }
+}`
+
 return {
-      "20  genes items in Wikidata and their adherence to the Genewiki human gene shape": {
+      "Human genes": {
         schema: wikidataHumanGeneItem.schema,
         passes: {
           "Get human genes (SPARQL)": {
@@ -296,12 +315,29 @@ return {
               "} LIMIT 20`@- start -"}
         },
         fails: {
-           "Human with a uniprot identifier": {
+           "Human geme items with a uniprot identifier": {
                             data: wikidataHumanGeneItem.fail,
                             queryMap: "SPARQL `SELECT * WHERE { "+
                                       "?item wdt:P351 ?ncbi_gene_id ;" +
                                        "wdt:P703 wd:Q15978631 ; " +
                                        "wdt:P352 ?uniprot_id . }`@- start -"}
+        },
+
+          "Start and End locations without build version": {
+                            data: wikidataHumanGeneItem.fail2,
+                            queryMap: "SPARQL `PREFIX wd: <http://www.wikidata.org/entity/> "+
+                                               "PREFIX p: <http://www.wikidata.org/prop/>"+
+                                               "PREFIX wdt: <http://www.wikidata.org/prop/direct/>"+
+                                               "PREFIX pq: <http://www.wikidata.org/prop/qualifier/>"+
+                                               "SELECT * WHERE {"+
+                                               "   ?item wdt:P703 wd:Q15978631 ;"+
+                                               "         p:P644 ?genomicStart ;"+
+                                               "         p:P645 ?genomicEnd ."+
+                                               "   ?genomicStart ps:P644 ?start ."+
+                                               "   ?genomicEnd ps:P645 ?end ."+
+                                               "   FILTER NOT EXISTS { "+
+                                               "     ?genomicStart pq:P659 ?o ."+
+                                               "     ?genomicEnd pq:P659 ?t .}} "
         }
       },
       "Each Wikidata item on Cancer should have a NCI Thesaurus ID": {
@@ -317,7 +353,7 @@ return {
             },
             fails: {
             }
-          },
+      },
     };
 
 })();
