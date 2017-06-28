@@ -5,11 +5,11 @@ var wikidataCancerItem = {}
 var wikidataItem_NCI = {};
 
 
-##########################
-#
-# Wikidata Item on Cancers should have a NCI thesaurus ID
-#
-##########################
+//##########################
+//#
+//# Wikidata Item on Cancers should have a NCI thesaurus ID
+//#
+//##########################
 
 
 wikidataItem_NCI.schema = `PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -44,11 +44,11 @@ WHERE
 } LIMIT 10
 `;
 
-##########################
-#
-# Shape to verify Wikidata Item on human genes
-#
-##########################
+//##########################
+//#
+//# Shape to verify Wikidata Item on human genes
+//#
+//##########################
 
 wikidataHumanGeneItem.schema = `# Shape Expression for Human genes in Wikidata
 PREFIX wd: <http://www.wikidata.org/entity/>
@@ -91,7 +91,7 @@ start = @<wikidata-human_gene>
 	p:P352 @<P352_uniprot_id_wor>{0} ;
 }
 
-# Shape expressions for Wikidata statements
+//# Shape expressions for Wikidata statements
 <P31_instance_of_gene> {
     ps:P31 [wd:Q7187] ;
 	prov:wasDerivedFrom @<ncbi-gene-reference> OR @<ensembl-gene-reference> ;
@@ -318,22 +318,22 @@ Query: PREFIX wd: <http://www.wikidata.org/entity/>
        }
 }`
 
-##########################
-#
-# Shape to verify Wikidata Items on diseases
-#
-##########################
+//##########################
+//#
+//# Shape to verify Wikidata Items on diseases
+//#
+//##########################
 
 wikidataDiseaseItem.schema = ``
 wikidataDiseaseItem.success = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
 Query: `
 
-##########################
-#
-# Shape to verify Wikidata Items on cancers
-#
-##########################
+//##########################
+//#
+//# Shape to verify Wikidata Items on cancers
+//#
+//##########################
 
 wikidataCancerItem.schema = ``
 wikidataCancerItem.success = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
@@ -349,7 +349,7 @@ Query: SELECT ?item ?itemLabel
 
 
 return {
-      "Human genes": {
+      "Wikidata items on human genes": {
         schema: wikidataHumanGeneItem.schema,
         passes: {
           "Wikidata items on human genes (SPARQL)": {
