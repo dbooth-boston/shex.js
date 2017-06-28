@@ -133,7 +133,7 @@ start = @<wikidata-human_gene>
 
 <P1057_chromosome> {
    ps:P1057 @<human-chromosomes> ;
-   pq:P659	@<genomic-assembly>+ ;
+   pq:P659	@<genomic-assembly>{1,2} ;
    prov:wasDerivedFrom @<ensembl-gene-reference> ;
 }
 
@@ -144,7 +144,7 @@ start = @<wikidata-human_gene>
 
 <P2548_strand_orientation> {
    ps:P2548	@<strand-orientation> ;
-   pq:P659		@<genomic-assembly>+ ;
+   pq:P659		@<genomic-assembly>{1,2} ;
    prov:wasDerivedFrom @<ensembl-gene-reference> ;
 }
 
@@ -285,11 +285,11 @@ p:P352 @<P352_uniprot_id> ;
 
 wikidataHumanGeneItem.sparql = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
-                               Query: SELECT DISTINCT * WHERE {
-                                       VALUES ?item {wd:Q417169 wd:Q410688 wd:Q416426 wd:Q417743 wd:Q418634 }
-                                        ?item wdt:P351 ?ncbigeneid ;
-                                              wdt:P703 wd:Q15978631 .
-                                      }`;
+Query: SELECT DISTINCT * WHERE {
+       VALUES ?item {wd:Q417169 wd:Q410688 wd:Q416426 wd:Q417743 wd:Q418634 }
+        ?item wdt:P351 ?ncbigeneid ;
+              wdt:P703 wd:Q15978631 .
+      }`;
 
 wikidataHumanGeneItem.sparql2 = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
