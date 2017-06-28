@@ -63,9 +63,9 @@ start = @<wikidata-human_gene>
 	p:P2548 @<P2548_strand_orientation> ;
 
 	#IDENTIFIERS
-	p:P351 @<P351_ncbi_gene_id> ;
+	#p:P351 @<P351_ncbi_gene_id> ;
 	p:P353 @<P353_hgnc_gene_symbol>* ;
-	p:P354 @<P354_hgnc_gene_id>* ;
+	#p:P354 @<P354_hgnc_gene_id>* ;
 	p:P594 @<P594_ensembl_gene_id>* ;
 	p:P639 @<P639_refseq_rna_id>* ;
 	p:P704 @<P704_ensembl_transcript_id>* ;
@@ -87,38 +87,38 @@ start = @<wikidata-human_gene>
 
 <P644_genomic_start> {
    ps:P644 LITERAL ;
-   pq:P1057	@<human-chromosomes>+ ;
-   pq:P659	@<genomic-assembly>+ ;
-   prov:wasDerivedFrom @<ensembl-gene-reference>+ ;
+   pq:P1057	@<human-chromosomes> ;
+   pq:P659	@<genomic-assembly> ;
+   prov:wasDerivedFrom @<ensembl-gene-reference> ;
 }
 
 <P645_genomic_end> {
    ps:P645 LITERAL ;
-   pq:P1057	@<human-chromosomes>+ ;
-   pq:P659	@<genomic-assembly>+ ;
-   prov:wasDerivedFrom @<ensembl-gene-reference>+ ;
+   pq:P1057	@<human-chromosomes> ;
+   pq:P659	@<genomic-assembly> ;
+   prov:wasDerivedFrom @<ensembl-gene-reference> ;
 }
 
 <P684_ortholog> {
    ps:P684 IRI ;
    pq:P703	IRI ;
-   prov:wasDerivedFrom	@<homologene-reference>+ ;
+   prov:wasDerivedFrom	@<homologene-reference> ;
 }
 
 <P688_encodes> {
    ps:P688 IRI ; # TODO: Once the human proteina shape is finished this should change to @<human_protein>
-   prov:wasDerivedFrom @<uniprot-reference>+;
+   prov:wasDerivedFrom @<uniprot-reference>;
 }
 
 <P703_found_in_taxon_human> {
      ps:P703 [wd:Q15978631] ;
-	 prov:wasDerivedFrom @<ensembl-gene-reference>+
+	 prov:wasDerivedFrom @<ensembl-gene-reference>
 }
 
 <P1057_chromosome> {
    ps:P1057 @<human-chromosomes> ;
-   pq:P659	@<genomic-assembly>+ ;
-   prov:wasDerivedFrom @<ensembl-gene-reference>+ ;
+   pq:P659	@<genomic-assembly> ;
+   prov:wasDerivedFrom @<ensembl-gene-reference> ;
 }
 
 <P2888_exact_match> {
@@ -128,14 +128,14 @@ start = @<wikidata-human_gene>
 
 <P2548_strand_orientation> {
    ps:P2548	@<strand-orientation> ;
-   pq:P659		@<genomic-assembly>+ ;
-   prov:wasDerivedFrom @<ensembl-gene-reference>+ ;
+   pq:P659		@<genomic-assembly> ;
+   prov:wasDerivedFrom @<ensembl-gene-reference> ;
 }
 
 ## IDENTIFIERS
 <P351_ncbi_gene_id> {
 	ps:P351 LITERAL ;
-	prov:wasDerivedFrom @<ncbi-gene-reference>+ ;
+	#prov:wasDerivedFrom @<ncbi-gene-reference> ;
 }
 
 <P352_uniprot_id_wor> {
@@ -144,32 +144,32 @@ start = @<wikidata-human_gene>
 
 <P353_hgnc_gene_symbol> {
    ps:P353 LITERAL ;
-   prov:wasDerivedFrom @<ncbi-gene-reference>+ ;
+   prov:wasDerivedFrom @<ncbi-gene-reference> ;
 }
 
 <P354_hgnc_gene_id> {
    ps:P354 LITERAL ;
-   prov:wasDerivedFrom @<ncbi-gene-reference>+ ;
+   #prov:wasDerivedFrom @<ncbi-gene-reference> ;
 }
 
 <P593_homologene_id> {
    ps:P593 LITERAL ;
-   prov:wasDerivedFrom @<ncbi-gene-reference>+ ;
+   prov:wasDerivedFrom @<ncbi-gene-reference> ;
 }
 
 <P594_ensembl_gene_id> {
    ps:P594 LITERAL ;
-   prov:wasDerivedFrom @<ensembl-gene-reference>+
+   prov:wasDerivedFrom @<ensembl-gene-reference>
 }
 
 <P639_refseq_rna_id> {
    ps:P639 LITERAL ;
-   prov:wasDerivedFrom @<ncbi-gene-reference>+ ;
+   # prov:wasDerivedFrom @<ncbi-gene-reference> ;
 }
 
 <P704_ensembl_transcript_id> {
    ps:P704 LITERAL ;
-   prov:wasDerivedFrom @<ensembl-gene-reference> OR <ncbi-gene-reference>+ ;
+   prov:wasDerivedFrom @<ensembl-gene-reference> OR <ncbi-gene-reference> ;
 }
 
 ## REFERENCES
