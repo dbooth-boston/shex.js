@@ -91,7 +91,7 @@ start = @<wikidata-human_gene>
 	p:P352 @<P352_uniprot_id_wor>{0} ;
 }
 
-//# Shape expressions for Wikidata statements
+# Shape expressions for Wikidata statements
 <P31_instance_of_gene> {
     ps:P31 [wd:Q7187] ;
 	prov:wasDerivedFrom @<ncbi-gene-reference> OR @<ensembl-gene-reference> ;
@@ -122,7 +122,7 @@ start = @<wikidata-human_gene>
 }
 
 <P688_encodes> {
-   ps:P688 IRI ; # TODO: Once the human proteina shape is finished this should change to @<human_protein>
+   ps:P688 IRI ; # TODO: Once the human proteins shape is finished this should change to @<human_protein>
    prov:wasDerivedFrom @<uniprot-reference>;
 }
 
@@ -133,7 +133,7 @@ start = @<wikidata-human_gene>
 
 <P1057_chromosome> {
    ps:P1057 @<human-chromosomes> ;
-   pq:P659	@<genomic-assembly> ;
+   pq:P659	@<genomic-assembly>+ ;
    prov:wasDerivedFrom @<ensembl-gene-reference> ;
 }
 
@@ -144,7 +144,7 @@ start = @<wikidata-human_gene>
 
 <P2548_strand_orientation> {
    ps:P2548	@<strand-orientation> ;
-   pq:P659		@<genomic-assembly> ;
+   pq:P659		@<genomic-assembly>+ ;
    prov:wasDerivedFrom @<ensembl-gene-reference> ;
 }
 
@@ -286,10 +286,18 @@ p:P352 @<P352_uniprot_id> ;
 wikidataHumanGeneItem.sparql = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
                                Query: SELECT DISTINCT * WHERE {
+                                       VALUES ?item {wd:Q417169 wd:Q410688 wd:Q416426 wd:Q417743 wd:Q418634 }
                                         ?item wdt:P351 ?ncbigeneid ;
                                               wdt:P703 wd:Q15978631 .
-                                      }
-                                      LIMIT 20`;
+                                      }`;
+
+wikidataHumanGeneItem.sparql2 = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+
+Query: SELECT DISTINCT * WHERE {
+     VALUES ?item {wd:Q417169 }
+      ?item wdt:P351 ?ncbigeneid ;
+            wdt:P703 wd:Q15978631 .
+}`;
 
 wikidataHumanGeneItem.fail = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
@@ -566,18 +574,28 @@ return {
           "Wikidata items on human genes (SPARQL)": {
             data: wikidataHumanGeneItem.sparql,
             queryMap: "SPARQL `SELECT DISTINCT * WHERE { "+
-              "{ ?item wdt:P351 ?ncbigeneid ; "+
+               "VALUES ?item {wd:Q410688 wd:Q416426 wd:Q417743 wd:Q418634 }" +
+              " ?item wdt:P351 ?ncbigeneid ; "+
               " wdt:P703 wd:Q15978631 ." +
-              "  } "+
-              "} LIMIT 20`@- start -"}
+              "  }`@- start -"}
         },
         fails: {
+           "Incorrect wikidata items on human genes (SPARQL)": {
+                       data: wikidataHumanGeneItem.sparql,
+                       queryMap: "SPARQL `SELECT DISTINCT * WHERE { "+
+                       "VALUES ?item {wd:Q417169 } " +
+                         " ?item wdt:P351 ?ncbigeneid ; "+
+                         " wdt:P703 wd:Q15978631 ." +
+                         "  }`@- start -"},
+
+
            "Human geme items with a uniprot identifier": {
                             data: wikidataHumanGeneItem.fail,
                             queryMap: "SPARQL `SELECT * WHERE { "+
                                       "?item wdt:P351 ?ncbi_gene_id ;" +
                                        "wdt:P703 wd:Q15978631 ; " +
                                        "wdt:P352 ?uniprot_id . }`@- start -"},
+
 
            "Start and End locations without build version": {
                             data: wikidataHumanGeneItem.fail2,
