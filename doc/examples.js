@@ -324,10 +324,119 @@ Query: PREFIX wd: <http://www.wikidata.org/entity/>
 //#
 //##########################
 
-wikidataDiseaseItem.schema = ``
+wikidataDiseaseItem.schema = `
+# Shape Expression for diseases coming from Disease Ontology in Wikidata
+
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX pr:  <http://www.wikidata.org/prop/reference/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+
+start = @<wikidata-disease>
+
+<wikidata-disease> {
+## STATEMENTS
+  p:P31 @<P31_instance_of_disease> ;
+  p:P2888	@<P2888_exact_match>* ;
+
+  ## IDENTIFIERS
+  p:P699 @<P699_disease_ontology_id>+ ;
+  p:P486 @<P486_mesh_id>* ;
+  p:P492 @<P492_omim_id>* ;
+  p:P493 @<P493_icd_9>* ;
+  p:P494 @<P494_icd_10>* ;
+  p:P1550 @<P1550_orphanet_id>* ;
+p:P1748 @<P1748_nci_thesaurus>* ;
+  p:P2892 @<P2892_umls-cui>* ;
+}
+
+# Shape expression for Wikidata statements
+<P31_instance_of_disease> {
+ ps:P31 [wd:Q12136] ;
+ prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P486_mesh_id> {
+    ps:P486 LITERAL ;
+      prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P492_omim_id> {
+     ps:P492 LITERAL ;
+     prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P493_icd_9> {
+     ps:P493 LITERAL ;
+     prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P494_icd_10> {
+     ps:P494 LITERAL ;
+     prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P699_disease_ontology_id> {
+      ps:P699 LITERAL ;
+      prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P1550_orphanet_id> {
+     ps:P1550 LITERAL ;
+     prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P1748_nci_thesaurus> {
+  ps:P1748 LITERAL ;
+  prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P2888_exact_match> {
+    ps:P2888 IRI ;
+    prov:wasDerivedFrom @<miriam_reference> OR @<do_reference> ;
+}
+
+<P2892_umls-cui> {
+     ps:P2892 LITERAL ;
+     prov:wasDerivedFrom @<do_reference> ;
+}
+
+# Shape expression of references used in Wikidata items sourced from the Disease Ontology
+<do_reference> {
+    pr:P248	IRI ;
+    pr:P699	LITERAL ;
+    pr:P813	xsd:dateTime ;
+}
+
+<miriam_reference> {
+    pr:P248		[wd:Q16335166] ;
+    pr:P854		IRI ;
+}
+
+<phenocarta-reference> {
+    pr:P248	@<phenocarta-release-item> ;
+    pr:P699	LITERAL ;
+    pr:P813	xsd:dateTime ;
+}
+
+<phenocarta-release-item> {
+    wdt:P856	<http://chibi.ubc.ca/Gemma/phenotypes.html> ;
+    wdt:P1065	IRI ;
+    wdt:P393	xsd:DateTime ;
+}
+`
 wikidataDiseaseItem.success = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
-Query: `
+Query: PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+       PREFIX wd: <http://www.wikidata.org/entity/>
+       SELECT * WHERE {
+          ?item wdt:P31 wd:Q12136 .
+       }`
 
 //##########################
 //#
@@ -335,7 +444,110 @@ Query: `
 //#
 //##########################
 
-wikidataCancerItem.schema = ``
+wikidataCancerItem.schema = `
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX prv: <http://www.wikidata.org/prop/reference/value/>
+PREFIX pr:  <http://www.wikidata.org/prop/reference/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+
+start = @<wikidata-disease>
+
+<wikidata-disease> {
+  ## STATEMENTS
+  p:P31 @<P31_instance_of_disease> ;
+  p:P2888	@<P2888_exact_match>* ;
+
+  ## IDENTIFIERS
+  p:P699 @<P699_disease_ontology_id>+ ;
+  p:P486 @<P486_mesh_id>* ;
+  p:P492 @<P492_omim_id>* ;
+  p:P493 @<P493_icd_9>* ;
+  p:P494 @<P494_icd_10>* ;
+  p:P1550 @<P1550_orphanet_id>* ;
+  p:P1748 @<P1748_nci_thesaurus>+ ;
+  p:P2892 @<P2892_umls-cui>* ;
+}
+
+# Shape expression for Wikidata statements
+<P31_instance_of_disease> {
+ ps:P31 [wd:Q12136] ;
+ prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P486_mesh_id> {
+    ps:P486 LITERAL ;
+      prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P492_omim_id> {
+     ps:P492 LITERAL ;
+     prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P493_icd_9> {
+     ps:P493 LITERAL ;
+     prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P494_icd_10> {
+     ps:P494 LITERAL ;
+     prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P699_disease_ontology_id> {
+      ps:P699 LITERAL ;
+      prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P1550_orphanet_id> {
+     ps:P1550 LITERAL ;
+     prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P1748_nci_thesaurus> {
+  ps:P1748 LITERAL ;
+  prov:wasDerivedFrom @<do_reference> ;
+}
+
+<P2888_exact_match> {
+    ps:P2888 IRI ;
+    prov:wasDerivedFrom @<miriam_reference> OR @<do_reference> ;
+}
+
+<P2892_umls-cui> {
+     ps:P2892 LITERAL ;
+     prov:wasDerivedFrom @<do_reference> ;
+}
+
+# Shape expression of references used in Wikidata items sourced from the Disease Ontology
+<do_reference> {
+    pr:P248	IRI ;
+    pr:P699	LITERAL ;
+    pr:P813	xsd:dateTime ;
+}
+
+<miriam_reference> {
+    pr:P248		[wd:Q16335166] ;
+    pr:P854		IRI ;
+}
+
+<phenocarta-reference> {
+    pr:P248	@<phenocarta-release-item> ;
+    pr:P699	LITERAL ;
+    pr:P813	xsd:dateTime ;
+}
+
+<phenocarta-release-item> {
+    wdt:P856	<http://chibi.ubc.ca/Gemma/phenotypes.html> ;
+    wdt:P1065	IRI ;
+    wdt:P393	xsd:DateTime ;
+}
+`
 wikidataCancerItem.success = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
 Query: `
@@ -344,7 +556,6 @@ wikidataCancerItem.fail = `Endpoint: https://query.wikidata.org/bigdata/namespac
 Query: SELECT ?item ?itemLabel
        WHERE
        { ?item wdt:P279* wd:Q12078 .
-         SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
        } `
 
 
