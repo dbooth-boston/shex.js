@@ -1,8 +1,18 @@
 Demos = (() => {
-var wikidataItem = {};
 var wikidataHumanGeneItem = {}
+var wikidataDiseaseItem = {}
+var wikidataCancerItem = {}
+var wikidataItem_NCI = {};
 
-wikidataItem.schema = `PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+##########################
+#
+# Wikidata Item on Cancers should have a NCI thesaurus ID
+#
+##########################
+
+
+wikidataItem_NCI.schema = `PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX p: <http://www.wikidata.org/prop/>
 PREFIX pr: <http://www.wikidata.org/prop/reference/>
@@ -24,7 +34,7 @@ start = @<wikidata_item>
 }
 `;
 
-wikidataItem.sparql = `
+wikidataItem_NCI.sparql = `
 Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
 Query: SELECT ?item ?itemLabel
@@ -33,6 +43,12 @@ WHERE
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
 } LIMIT 10
 `;
+
+##########################
+#
+# Shape to verify Wikidata Item on human genes
+#
+##########################
 
 wikidataHumanGeneItem.schema = `# Shape Expression for Human genes in Wikidata
 PREFIX wd: <http://www.wikidata.org/entity/>
@@ -302,11 +318,41 @@ Query: PREFIX wd: <http://www.wikidata.org/entity/>
        }
 }`
 
+##########################
+#
+# Shape to verify Wikidata Items on diseases
+#
+##########################
+
+wikidataDiseaseItem.schema = ``
+wikidataDiseaseItem.success = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+
+Query: `
+
+##########################
+#
+# Shape to verify Wikidata Items on cancers
+#
+##########################
+
+wikidataCancerItem.schema = ``
+wikidataCancerItem.success = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+
+Query: `
+wikidataCancerItem.fail = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+
+Query: SELECT ?item ?itemLabel
+       WHERE
+       { ?item wdt:P279* wd:Q12078 .
+         SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
+       } `
+
+
 return {
       "Human genes": {
         schema: wikidataHumanGeneItem.schema,
         passes: {
-          "Get human genes (SPARQL)": {
+          "Wikidata items on human genes (SPARQL)": {
             data: wikidataHumanGeneItem.sparql,
             queryMap: "SPARQL `SELECT DISTINCT * WHERE { "+
               "{ ?item wdt:P351 ?ncbigeneid ; "+
@@ -340,19 +386,52 @@ return {
 
         }
       },
-      "Each Wikidata item on Cancer should have a NCI Thesaurus ID": {
-            schema: wikidataItem.schema,
+      "Wikidata items on disease": {
+            schema: wikidataDiseaseItem.schema,
             passes: {
-              "Get all Wikidata items on Cancers (SPARQL)": {
-                data: wikidataItem.sparql,
-                queryMap: "SPARQL `SELECT ?item ?itemLabel "+
+              "Get all disease items in Wikidata with a Disease Ontology ID (SPARQL)": {
+                data: wikidataDiseaseItem.sparql,
+                queryMap: "SPARQL `SELECT ?item "+
                   "WHERE "+
-                  "{ ?item wdt:P279* wd:Q12078 . "+
-                  "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" } "+
-                  "} LIMIT 10`@- start -"}
+                  "{ ?item wdt:P699 ?doid . "+
+                  "} `@- start -"}
             },
             fails: {
+              "Get all disease items in Wikidata through property P31 (SPARQL)": {
+                data: wikidataDiseaseItem.sparql,
+                queryMap: "SPARQL `SELECT ?item "+
+                 "WHERE "+
+                 "{ ?item wdt:P31 wd: . "+
+                 "} `@- start -"}
             }
-      }
+      },
+      "Wikidata items on cancer": {
+                  schema: wikidataCancerItem.schema,
+                  passes: {
+                    "Get all cancer items in Wikidata (SPARQL)": {
+                      data: wikidataCancerItem.sparql,
+                      queryMap: "SPARQL `SELECT ?item "+
+                        "WHERE "+
+                        "{ ?item wdt:P279* wd:Q12078 . "+
+                        "} `@- start -"}
+                  },
+                  fails: {
+                  }
+      },
+      "Wikidata item on Cancer should have a NCI Thesaurus ID": {
+                  schema: wikidataItem_NCI.schema,
+                  passes: {
+                    "Get all Wikidata items on Cancers (SPARQL)": {
+                      data: wikidataItem_NCI.sparql,
+                      queryMap: "SPARQL `SELECT ?item "+
+                        "WHERE "+
+                        "{ ?item wdt:P279* wd:Q12078 . "+
+                        "} `@- start -"}
+                  },
+                  fails: {
+                  }
+      },
+
+
     };
 })();
