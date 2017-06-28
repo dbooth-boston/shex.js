@@ -68,8 +68,8 @@ start = @<wikidata-human_gene>
 	p:P31 @<P31_instance_of_gene> ;
     p:P279 @<P279_subclass_of_gene>+ ;
 	(
-		p:P644 @<P644_genomic_start>+ ;
-		p:P645 @<P645_genomic_end>+ ;
+		p:P644 @<P644_genomic_start> ;
+		p:P645 @<P645_genomic_end> ;
 	)* ;
 	p:P684 @<P684_ortholog>* ;
 	p:P688 @<P688_encodes>* ;
@@ -79,9 +79,9 @@ start = @<wikidata-human_gene>
 	p:P2548 @<P2548_strand_orientation> ;
 
 	#IDENTIFIERS
-	#p:P351 @<P351_ncbi_gene_id> ;
+	p:P351 @<P351_ncbi_gene_id> ;
 	p:P353 @<P353_hgnc_gene_symbol>* ;
-	#p:P354 @<P354_hgnc_gene_id>* ;
+	p:P354 @<P354_hgnc_gene_id>* ;
 	p:P594 @<P594_ensembl_gene_id>* ;
 	p:P639 @<P639_refseq_rna_id>* ;
 	p:P704 @<P704_ensembl_transcript_id>* ;
@@ -438,12 +438,20 @@ p:P1748 @<P1748_nci_thesaurus>* ;
     wdt:P393	xsd:DateTime ;
 }
 `
-wikidataDiseaseItem.success = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+wikidataDiseaseItem.success1 = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
 
 Query: PREFIX wdt: <http://www.wikidata.org/prop/direct/>
        PREFIX wd: <http://www.wikidata.org/entity/>
        SELECT * WHERE {
           ?item wdt:P31 wd:Q12136 .
+       }`
+
+wikidataDiseaseItem.success2 = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+
+Query: PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+       PREFIX wd: <http://www.wikidata.org/entity/>
+       SELECT * WHERE {
+          ?item wdt:P699 ?doid .
        }`
 
 //##########################
@@ -619,7 +627,7 @@ return {
             schema: wikidataDiseaseItem.schema,
             passes: {
               "Get all disease items in Wikidata with a Disease Ontology ID (SPARQL)": {
-                data: wikidataDiseaseItem.sparql,
+                data: wikidataDiseaseItem.success2,
                 queryMap: "SPARQL `SELECT ?item "+
                   "WHERE "+
                   "{ ?item wdt:P699 ?doid . "+
@@ -627,22 +635,21 @@ return {
             },
             fails: {
               "Get all disease items in Wikidata through property P31 (SPARQL)": {
-                data: wikidataDiseaseItem.sparql,
+                data: wikidataDiseaseItem.success1,
                 queryMap: "SPARQL `SELECT ?item "+
                  "WHERE "+
-                 "{ ?item wdt:P31 wd: . "+
-                 "} `@- start -"}
+                 "{ ?item wdt:P31 wd:Q12136 . "+
+                 "} LIMIT 10`@- start -"}
             }
       },
       "Wikidata items on cancer": {
                   schema: wikidataCancerItem.schema,
                   passes: {
                     "Get all cancer items in Wikidata (SPARQL)": {
-                      data: wikidataCancerItem.sparql,
-                      queryMap: "SPARQL `SELECT ?item "+
-                        "WHERE "+
+                      data: wikidataCancerItem.success,
+                      queryMap: "SPARQL `SELECT ?item WHERE "+
                         "{ ?item wdt:P279* wd:Q12078 . "+
-                        "} `@- start -"}
+                        "} LIMIT 10`@- start -"}
                   },
                   fails: {
                   }
