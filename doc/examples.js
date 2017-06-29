@@ -256,7 +256,7 @@ FAIRdistribution.success = `@prefix rdf: <http://www.w3.org/1999/02/22-rdf-synta
                             	dcterms:conformsTo <http://rdf.biosemantics.org/fdp/shex/distributionMetadata> ;
                             	a dcat:Distribution ;
                             	dcat:accessURL <http://www.unina2.it/> ;
-                            	dcterms:issued "W2017-06-28T12:12:22.644Z"^^xsd:dateTime ;
+                            	dcterms:issued "2017-06-28T12:12:22.644Z"^^xsd:dateTime ;
                             	dcterms:modified "2017-06-28T12:12:22.644Z"^^xsd:dateTime ;
                             	dcat:mediaType "text/html" .`
 
@@ -453,7 +453,7 @@ return {
              fails: {"Missing metadataIdentifier": {
                     data: FAIRFDP.fail,
                     queryMap: "<http://demonstrator.fair-dtls.surf-hosted.nl:8080/fdp>@:fdpMetadata"
-             }
+                    }
 
              }
 
@@ -478,13 +478,11 @@ return {
                schema: FAIRdistribution.schema,
                passes: {"Correct distributioon": {
                      data: FAIRdistribution.success,
-                     queryMap: "<http://demonstrator.fair-dtls.surf-hosted.nl:8080/fdp/distribution/76957-collection1-html>@:distributionMetadata"
+                     queryMap: "<http://demonstrator.fair-dtls.surf-hosted.nl:8080/fdp/distribution/76957-collection1-html>@:distributionMetadata"},
                },
-               fails: {"Incorrect xsd dateTime format": {
-                  data: FAIRdistribution.fail,
-                  queryMap: "<http://demonstrator.fair-dtls.surf-hosted.nl:8080/fdp/distribution/76957-collection1-html>@:distributionMetadata"
-               }
-               }
+               fails: {"Incorrect data format": {
+                    data: FAIRdistribution.fail,
+                    queryMap: "<http://demonstrator.fair-dtls.surf-hosted.nl:8080/fdp/distribution/76957-collection1-html>@:distributionMetadata"},
         },
     },
 
