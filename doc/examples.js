@@ -4,7 +4,12 @@ var wikicite_proceedings = {};
 var wikicite_book = {};
 
 wikicite_paper.schema = ``;
-wikicite_paper.success = ``;
+wikicite_paper.success = `Endpoint: https://query.wikidata.org/bigdata/namespace/wdq/sparql
+                          Query: SELECT ?item ?itemLabel WHERE {
+                                   ?item wdt:P698 ?pmid .
+                                   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+                                 }
+                                 LIMIT 10`;
 wikicite_paper.fail = ``;
 
 wikicite_proceedings.schema = ``;
