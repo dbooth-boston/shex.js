@@ -69,8 +69,8 @@ wikicite_book.fail = ``;
             "wrong birthdate datatype": {
               data: clinicalObs.birthdate_datatype,
               queryMap: "<http://a.example/Obs1>@- start -"}
-          }
-    }
+          },
+    },
     "English book": {
           schema: wikicite_book.schema,
           passes: {
@@ -94,7 +94,7 @@ wikicite_book.fail = ``;
             "wrong birthdate datatype": {
               data: clinicalObs.birthdate_datatype,
               queryMap: "<http://a.example/Obs1>@- start -"}
-          }
-    }
+          },
+    },
   };
 })();
