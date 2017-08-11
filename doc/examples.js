@@ -44,8 +44,8 @@ wikicite_book.fail = ``;
         "wrong birthdate datatype": {
           data: clinicalObs.birthdate_datatype,
           queryMap: "<http://a.example/Obs1>@- start -"}
-      }
-    }
+      },
+    },
     "Proceedings": {
           schema: wikicite_proceedings.schema,
           passes: {
